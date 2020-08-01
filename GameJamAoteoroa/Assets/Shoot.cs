@@ -12,7 +12,7 @@ public class Shoot : MonoBehaviour
     public LineRenderer showShoot;
     public GameObject projectilePrefab;
     public Sprite[] sprites;
-    List<GameObject> projectiles = new List<GameObject>();
+    //List<GameObject> projectiles = new List<GameObject>();
     public Transform goal;
     public float radius;
     GameObject currentProjectile;
@@ -65,6 +65,7 @@ public class Shoot : MonoBehaviour
             Rigidbody2D rBody = currentProjectile.GetComponent<Rigidbody2D>();
             currentProjectile.GetComponent<Rigidbody2D>().simulated = true;
             currentProjectile.transform.parent = null;
+            currentProjectile.GetComponent<Projectile>().shoot();
             rBody.velocity = shootSpeed * shootDirection;
             shooting = false;
             showShoot.enabled = false;
@@ -75,7 +76,7 @@ public class Shoot : MonoBehaviour
             currentProjectile.GetComponent<SpriteRenderer>().sprite = sprites[(int)(Random.value * sprites.Length)];
             currentProjectile.SetActive(true);
             currentProjectile.GetComponent<Rigidbody2D>().simulated = false;
-
+            Game.instance.projectiles.Add(currentProjectile.GetComponent<Projectile>());
 
         }
 
