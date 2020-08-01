@@ -16,7 +16,7 @@ public class Projectile : MonoBehaviour
     public Text showOrbits;
     public Canvas canvas;
     int orbits;
-  
+    float startDistance;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +25,7 @@ public class Projectile : MonoBehaviour
         //sprite = this.GetComponent<SpriteRenderer>();
         //rBody = this.GetComponent<Rigidbody2D>();
         showOrbits.color = Color.clear;
+        startDistance = Vector3.Distance(transform.position, goal.position);
     }
 
     public void shoot() {
@@ -38,13 +39,17 @@ public class Projectile : MonoBehaviour
     {
 
         distance = Vector3.Distance(transform.position, goal.position);
+        if (distance > 10) {
+            Game.instance.projectiles.Remove(this);
+            Destroy(this);
+        }
         sprite.color = baseCol / distance * 2;
 
-        radius = Vector3.Distance(transform.position, goal.position);
+        
         if (radius < 4)
         {
             Vector3 r = goal.position - transform.position;
-            rBody.AddForce(r);
+            rBody.AddForce(distance*r.normalized);
         }
 
         bearing = angleRange(Mathf.Atan2(transform.position.x, transform.position.y)) - startBearing;
@@ -60,8 +65,10 @@ public class Projectile : MonoBehaviour
         if (orbit && bearing < 0.1f) {
             orbit = false;
             orbits++;
-            showOrbits.text = "" + orbits ;
-            Game.instance.addPoints(this);
+            //showOrbits.text = "" + orbits ;
+            int p = (int)((startDistance - distance)*10);
+            showOrbits.text = "+" + p;
+            Game.instance.addPoints(p);
             showOrbits.color = Color.white;
             StartCoroutine(show());
 

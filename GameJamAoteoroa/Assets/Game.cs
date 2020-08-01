@@ -17,9 +17,9 @@ public class Game : MonoBehaviour
         projectiles = new List<Projectile>();
     }
 
-    public void addPoints(Projectile p) {
+    public void addPoints(int p) {
        
-        StartCoroutine(add(projectiles.Count * 10));
+        StartCoroutine(add(projectiles.Count *p));
     }
 
     IEnumerator add(int count) {
